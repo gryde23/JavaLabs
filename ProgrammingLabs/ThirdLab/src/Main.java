@@ -18,6 +18,8 @@ public class Main {
                 case 1 -> task1();
                 case 2 -> task2();
                 case 3 -> task3();
+                case 4 -> tsk4();
+                case 5 -> tsk5();
                 default -> {
                     System.out.println("Такого задания нет. Программа завершена.");
                     return;
@@ -27,7 +29,6 @@ public class Main {
     }
 
     public static void task1() {
-        System.out.println("------------Task 1------------");
         System.out.printf("%7s %15s %20s\n", "x", "sin(x)", "e^x / x * lg (x)");
         for (var x = Math.PI / 15; x < Math.PI; x += Math.PI/15) {
             System.out.printf("%10.5f %15.7e %15.7e\n", x, Math.sin(x), Math.exp(x) / x * Math.log10(x));
@@ -35,7 +36,6 @@ public class Main {
     }
 
     public static void task2() {
-        System.out.println("------------Task 2------------");
         Random random = new Random();
         int rows = random.nextInt(10) + 1, columns = random.nextInt(10) + 1;
         int[][] array = new int[rows][];
@@ -83,6 +83,52 @@ public class Main {
             bubblesort(row);
             System.out.println(Arrays.toString(row));
         }
+    }
+
+    public static void tsk4() {
+        System.out.print("Введите через пробел значения x1, y1, r1 и x2, y2, r2:");
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+        String[] data = input.split("\\s+");
+        while (data.length != 6) {
+            System.out.print("Некорректный ввод! Повторите попытку: ");
+            input = scanner.nextLine();
+            data = input.split("\\s+");
+        }
+
+        task4 t = new task4();
+        t.setX1(Integer.parseInt(data[0]));
+        t.setY1(Integer.parseInt(data[1]));
+        t.setR1(Integer.parseInt(data[2]));
+        t.setX2(Integer.parseInt(data[3]));
+        t.setY2(Integer.parseInt(data[4]));
+        t.setR2(Integer.parseInt(data[5]));
+        int res = t.task();
+        System.out.print(res + "\n");
+    }
+
+    public static void tsk5() {
+        System.out.print("Введите через пробел значения x1, y1, r1 и x2, y2, r2:");
+        Scanner scanner = new Scanner(System.in);
+
+        String input = scanner.nextLine();
+        String[] data = input.split("\\s+");
+        while (data.length != 6) {
+            System.out.print("Некорректный ввод! Повторите попытку: ");
+            input = scanner.nextLine();
+            data = input.split("\\s+");
+        }
+
+        task5 t = new task5();
+        t.setX1(Integer.parseInt(data[0]));
+        t.setY1(Integer.parseInt(data[1]));
+        t.setR1(Integer.parseInt(data[2]));
+        t.setX2(Integer.parseInt(data[3]));
+        t.setY2(Integer.parseInt(data[4]));
+        t.setR2(Integer.parseInt(data[5]));
+        task5.Task5 res = t.task();
+        System.out.print(res + "\n");
     }
 }
 
