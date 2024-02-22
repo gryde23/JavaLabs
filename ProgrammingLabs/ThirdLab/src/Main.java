@@ -3,6 +3,8 @@
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -14,6 +16,7 @@ public class Main {
         while (true) {
             System.out.print("\nВведите номер задания: ");
             int input = scanner.nextInt();
+            scanner.nextLine();
             switch (input) {
                 case 1 -> task1();
                 case 2 -> task2();
@@ -23,8 +26,11 @@ public class Main {
                 case 6 -> task6();
                 case 7 -> task7();
                 case 8 -> task8();
+                case 9 -> task9();
+                case 10 -> task10();
                 default -> {
                     System.out.println("Такого задания нет. Программа завершена.");
+                    scanner.close();
                     return;
                 }
             }
@@ -201,6 +207,30 @@ public class Main {
             P = P * x + a[i];
         }
         System.out.println("Значение полинома: " + P);
+    }
+
+    public static void task9() {
+        Pattern p = Pattern.compile("((\\+7|8)[-\\s(]?\\d{3}[-\\s)]?\\s?\\d{3}([-\\s]?\\d{2}){2})|([23][\\s-]?([\\s-]?\\d{2}){3})");
+        String numbers = "89043781661 +79043781661 +7 904 378 1661  +7 904 378 16 61" +
+                "+7-904-378-16-61 +7(904)3781661 +7(904) 378-16 61 " +
+                " 8 904 378-16-61 +7989(199)35-92 220-30-40 3-04-23-52 3 45 52 42 3 43-53-65";
+        Matcher m = p.matcher(numbers);
+        while (m.find()) {
+            int start = m.start();
+            int end = m.end();
+            System.out.println(numbers.substring(start, end));
+        }
+    }
+
+    public static void task10(){
+        Pattern p = Pattern.compile("((\\+7|8)[-\\s(]?\\d{3}[-\\s)]?\\s?\\d{3}([-\\s]?\\d{2}){2})|([23][\\s-]?([\\s-]?\\d{2}){3})");
+        String text = "Мои номера 220-30-40 и 8904-378-16-61 не считая служебных";
+        Matcher m = p.matcher(text);
+        while(m.find()){
+            int begin = m.start();
+            int end = m.end();
+            System.out.println(text.substring(begin, end));
+        }
     }
 }
 
