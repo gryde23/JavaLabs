@@ -20,6 +20,7 @@ public class Main {
                 case 3 -> task3();
                 case 4 -> tsk4();
                 case 5 -> tsk5();
+                case 6 -> task6();
                 default -> {
                     System.out.println("Такого задания нет. Программа завершена.");
                     return;
@@ -129,6 +130,41 @@ public class Main {
         t.setR2(Integer.parseInt(data[5]));
         task5.Task5 res = t.task();
         System.out.print(res + "\n");
+    }
+
+    public static double Integral(double[] x, double[] y) {
+        double res = 0, h = x[1] - x[0];
+        for (int i = 0; i < 101; i++) {
+            res += h * y[i];
+        }
+        return res;
+    }
+    public static void task6() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.print("Задайте интервал через пробел: ");
+        String input = scanner.nextLine();
+        String[] interval = input.split("\\s+");
+        int begin = Integer.parseInt(interval[0]), end = Integer.parseInt(interval[1]);
+        while (interval.length != 2 || begin > end) {
+            System.out.print("Некорректный ввод! Повторите попытку: ");
+            input = scanner.nextLine();
+            interval = input.split("\\s+");
+            begin = Integer.parseInt(interval[0]);
+            end = Integer.parseInt(interval[1]);
+        }
+        double len = end - begin;
+        double[] x = new double[101], y = new double[101];
+        x[0] = begin;
+        y[0] = Math.exp(begin) + Math.pow(begin, 3);
+        System.out.printf("%7s %20s\n%10.3f %20.3f\n", "x", "y", x[0], y[0]);
+        for(int i = 1; i < 101; i ++) {
+            x[i] = begin + i * (len / 101);
+            y[i] = Math.exp(x[i]) - Math.pow(x[i], 3);
+            System.out.printf("%10.3f %20.3f\n", x[i], y[i]);
+        }
+
+        double res = Integral(x, y);
+        System.out.printf("Значение интеграла: %5.3f\n", res);
     }
 }
 
