@@ -7,13 +7,13 @@ import java.util.Scanner;
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class Main {
+    private static final Scanner scanner = new Scanner(System.in);
+
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
 
         while (true) {
             System.out.print("\nВведите номер задания: ");
-            int input = 0;
-            if (scanner.hasNextInt()) input = scanner.nextInt();
+            int input = scanner.nextInt();
             switch (input) {
                 case 1 -> task1();
                 case 2 -> task2();
@@ -21,6 +21,8 @@ public class Main {
                 case 4 -> tsk4();
                 case 5 -> tsk5();
                 case 6 -> task6();
+                case 7 -> task7();
+                case 8 -> task8();
                 default -> {
                     System.out.println("Такого задания нет. Программа завершена.");
                     return;
@@ -31,7 +33,7 @@ public class Main {
 
     public static void task1() {
         System.out.printf("%7s %15s %20s\n", "x", "sin(x)", "e^x / x * lg (x)");
-        for (var x = Math.PI / 15; x < Math.PI; x += Math.PI/15) {
+        for (var x = Math.PI / 15; x < Math.PI; x += Math.PI / 15) {
             System.out.printf("%10.5f %15.7e %15.7e\n", x, Math.sin(x), Math.exp(x) / x * Math.log10(x));
         }
     }
@@ -43,7 +45,7 @@ public class Main {
         for (int i = 0; i < rows; i++) {
             array[i] = new int[columns];
             for (int j = 0; j < columns; j++) {
-                array[i][j] = random.nextInt(100)  - 50;
+                array[i][j] = random.nextInt(100) - 50;
                 System.out.printf("%5d ", array[i][j]);
             }
             columns = random.nextInt(10) + 1;
@@ -70,6 +72,7 @@ public class Main {
             }
         }
     }
+
     public static void task3() {
         Random random = new Random();
         int[][] matrix = new int[3][3];
@@ -88,7 +91,6 @@ public class Main {
 
     public static void tsk4() {
         System.out.print("Введите через пробел значения x1, y1, r1 и x2, y2, r2:");
-        Scanner scanner = new Scanner(System.in);
 
         String input = scanner.nextLine();
         String[] data = input.split("\\s+");
@@ -111,7 +113,6 @@ public class Main {
 
     public static void tsk5() {
         System.out.print("Введите через пробел значения x1, y1, r1 и x2, y2, r2:");
-        Scanner scanner = new Scanner(System.in);
 
         String input = scanner.nextLine();
         String[] data = input.split("\\s+");
@@ -139,8 +140,8 @@ public class Main {
         }
         return res;
     }
+
     public static void task6() {
-        Scanner scanner = new Scanner(System.in);
         System.out.print("Задайте интервал через пробел: ");
         String input = scanner.nextLine();
         String[] interval = input.split("\\s+");
@@ -157,7 +158,7 @@ public class Main {
         x[0] = begin;
         y[0] = Math.exp(begin) + Math.pow(begin, 3);
         System.out.printf("%7s %20s\n%10.3f %20.3f\n", "x", "y", x[0], y[0]);
-        for(int i = 1; i < 101; i ++) {
+        for (int i = 1; i < 101; i++) {
             x[i] = begin + i * (len / 101);
             y[i] = Math.exp(x[i]) - Math.pow(x[i], 3);
             System.out.printf("%10.3f %20.3f\n", x[i], y[i]);
@@ -165,6 +166,41 @@ public class Main {
 
         double res = Integral(x, y);
         System.out.printf("Значение интеграла: %5.3f\n", res);
+    }
+
+    public static void task7() {
+        System.out.print("Введите число: ");
+        int num = scanner.nextInt(), buf = num;
+        System.out.print("Введите систему счисления: ");
+        int system = scanner.nextInt();
+        StringBuilder result = new StringBuilder();
+        while (num / system > 0) {
+            result.append(num % system);
+            num /= system;
+        }
+        result.append(num);
+        result.reverse();
+        System.out.printf("Число %d в %d системе счисления(алгоритм): %s\n", buf, system, result);
+        System.out.println("С помощью метода toString(): " + Integer.toString(buf, system));
+    }
+
+    public static void task8() {
+        System.out.print("Введите x: ");
+        double x = scanner.nextDouble();
+        System.out.print("Введите степень полинома: ");
+        int grade = scanner.nextInt();
+        int[] a = new int[grade];
+        Random random = new Random();
+        for (int i = 0; i < grade; i++) {
+            a[i] = random.nextInt(20);
+        }
+        System.out.println(Arrays.toString(a));
+        double P = a[grade - 1] * x + a[grade - 2];
+
+        for (int i = grade - 3; i >= 0; i--) {
+            P = P * x + a[i];
+        }
+        System.out.println("Значение полинома: " + P);
     }
 }
 
