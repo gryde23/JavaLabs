@@ -1,5 +1,7 @@
 import java.util.HashSet;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
 // click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
@@ -10,6 +12,10 @@ public class Main {
         var alphabet = Alphabet();
         System.out.print("Введите количество цепочек: ");
         int chains = scanner.nextInt();
+        String[] res = Regular(chains, alphabet);
+        for (String word: res) {
+            System.out.println(word);
+        }
     }
 
     public static String Alphabet(){
@@ -32,7 +38,7 @@ public class Main {
 
     public static String NumberToWord(String alf, int wordCode) {
         int del;
-        String buff = "";
+        StringBuilder buff = new StringBuilder();
         do {
             del = wordCode % alf.length();
             if (del == 0) {
@@ -40,18 +46,31 @@ public class Main {
                 wordCode -= alf.length();
             }
             wordCode /= alf.length();
-            buff += alf.charAt(del - 1);
+            buff.append(alf.charAt(del - 1));
         }
-        while (wordCode >= alf.length());
+        while (wordCode != 0);
 
-        String word = "";
+        StringBuilder word = new StringBuilder();
         for (int i = buff.length() - 1; i >= 0; i--) {
-            word += buff.charAt(i);
+            word.append(buff.charAt(i));
         }
-        return word;
+        return word.toString();
     }
 
-    public static void Regular() {
-
+    public static String[] Regular(int chains, String alphabet) {
+        String word = "";
+        String[] res = new String[chains];
+        Pattern reg = Pattern.compile("02|20");
+        int i = 1, j = 0;
+        while(res[chains - 1] == null) {
+            word = NumberToWord(alphabet, i);
+            while (reg.matcher(word).find()) {
+                i++;
+                word = NumberToWord(alphabet, i);
+            }
+            res[j] = word;
+            i++; j++;
+        }
+        return res;
     }
 }
