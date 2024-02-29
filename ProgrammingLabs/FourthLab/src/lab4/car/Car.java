@@ -1,124 +1,77 @@
 package lab4.car;
 
-import java.util.Objects;
-import java.util.Scanner;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Car {
+public abstract class Car {
+    public enum Type {PASSENGER, BUS, TRUCK, SPECIAL}
+    private final Pattern patternRegNum = Pattern.compile("[АВЕКМНОРСТУХ]\\d{3}[АВЕКМНОРСТУХ]{2}\\d{2,3}RUS");
+    private String regNumber, color;
+    private final String brand;
+    private Engine engine;
+    private final int wheels;
+    private final Type type;
 
-    private final Scanner scanner = new Scanner(System.in);
-    private String RegNumber, Color;
-    private final String Mark;
-    private int Power;
-    private final int Wheels;
-    private final Types_of_Cars Type;
-
-    public Car() {
-        System.out.println("Задайте характеристики авто.");
-        System.out.print("Марка: ");
-        this.Mark = scanner.nextLine();
-        System.out.print("Цвет: ");
-        this.Color = scanner.nextLine();
-        System.out.print("Мощность двигателя: ");
-        this.Power = scanner.nextInt();
-        System.out.print("Количество колес: ");
-        this.Wheels = scanner.nextInt();
-        scanner.nextLine();
-        System.out.print("Тип(Легковой - 0, Грузовой - 1, Автобус - 2): ");
-        int type = scanner.nextInt();
-        while (type > 2 || type < 0) {
-            System.out.print("Такого типа нет. Повторите ввод: ");
-            type = scanner.nextInt();
-        }
-        this.Type = Types_of_Cars.values()[type];
-        scanner.nextLine();
-        System.out.print("Регистрационный номер(если нет введите '-'): ");
-        String num = scanner.nextLine();
-        if (!Objects.equals(num, "-")) checkRegNumber(num);
+    public Car(String brand, String color, Engine engine, Type type, int wheels) {
+        this.brand = brand;
+        this.color = color;
+        this.engine = engine;
+        this.type = type;
+        this.wheels = wheels;
+    }
+    public Car(String brand,String regNumber, String color, Engine engine, Type type, int wheels) {
+       setRegNumber(regNumber);
+        this.brand = brand;
+        this.color = color;
+        this.engine = engine;
+        this.type = type;
+        this.wheels = wheels;
     }
 
-    public void getAllCharacteristics() {
-        System.out.printf("""
-                Марка: %s
-                Цвет: %s
-                Мощность двигателя: %d
-                Количество колес: %d
-                Тип: %s
-                Номер: %s
-                """, getMark(), getColor(), getPower(), getWheels(), getType(), getRegNumber());
-
+    @Override
+    public String toString() {
+        return "Car{" +
+                "regNumber='" + regNumber + '\'' + '\n' +
+                " color='" + color + '\'' + '\n' +
+                " brand='" + brand + '\'' + '\n' +
+                " engine=" + engine + '\n' +
+                " wheels=" + wheels + '\n' +
+                " type=" + type +
+                "}\n";
     }
 
-    public int getPower() {
-        return Power;
+    public void setColor(String color) {
+        this.color = color;
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
+
+    public void setRegNumber(String regNumber) {
+        setRegNumber(regNumber, patternRegNum);
     }
 
     public int getWheels() {
-        return Wheels;
+        return wheels;
     }
 
     public String getRegNumber() {
-        return RegNumber;
+        return regNumber;
     }
 
     public String getColor() {
-        return Color;
+        return color;
     }
 
     public String getMark() {
-        return Mark;
+        return brand;
     }
 
-    public Types_of_Cars getType() {
-        return Type;
+    public Type getType() {
+        return type;
     }
-
-    public void Changes() {
-        System.out.print("Изменились какие-либо характеристики авто? Ответ: ");
-        String answer = scanner.nextLine();
-        Pattern yes = Pattern.compile("Да|да|yes|Yes");
-        Matcher m = yes.matcher(answer);
-        if (!m.find()) {
-            System.out.println("Текущие характеристики авто:");
-            getAllCharacteristics();
-            return;
-        }
-        while (true) {
-            System.out.print("Что конкретно изменилось(Цвет - 1, Мощность двигателя - 2, Регистрационный номер - 3, Ничего - 0): ");
-            int input = scanner.nextInt();
-            scanner.nextLine();
-            switch (input) {
-                case 1 -> {
-                    System.out.print("Новый цвет авто: ");
-                    this.Color = scanner.nextLine();
-                }
-                case 2 -> {
-                    System.out.print("Мощность двигателя: ");
-                    this.Power = scanner.nextInt();
-                }
-                case 3 -> {
-                    System.out.print("Регистрационный номер: ");
-                    String num = scanner.nextLine();
-                    checkRegNumber(num);
-                }
-                default -> {
-                    System.out.println("Изменения сохранены.Новые характеристики авто:");
-                    getAllCharacteristics();
-                    return;
-                }
-            }
-        }
-    }
-
-    private void checkRegNumber(String RegNum) {
-        Pattern Numbers = Pattern.compile("[АAВBЕEКKМMНHОOРPСCТTУYХX]\\s?\\d{3}\\s?[АAВBЕEКKМMНHОOРPСCТTУYХX]{2}\\s?\\d{2,3}\\s?RUS");
-        Matcher m = Numbers.matcher(RegNum);
-        while (!m.find()) {
-            System.out.print("Некорректно задан номер авто! Повторите попытку: ");
-            RegNum = scanner.nextLine();
-            m = Numbers.matcher(RegNum);
-        }
-        this.RegNumber = RegNum;
+    protected void setRegNumber(String regNum, Pattern pattern) {
+        if (pattern.matcher(regNum).matches()) this.regNumber = regNum;
+        else System.out.println("Некорректно задан номер");
     }
 }
