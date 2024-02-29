@@ -1,4 +1,5 @@
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -21,8 +22,8 @@ public class Main {
     public static String Alphabet(){
         System.out.print("Введите алфавит: ");
         String alf = scanner.nextLine();
-        while (alf.length() < 2) {
-            System.out.print("Алфавит слишком короткий, повторите ввод: ");
+        while (!Objects.equals(alf, "012")) {
+            System.out.print("Некорректный алфавит! Повторите ввод: ");
             alf = scanner.nextLine();
         }
 

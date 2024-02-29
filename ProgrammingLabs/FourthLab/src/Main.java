@@ -1,5 +1,6 @@
 import lab4.car.Car;
 import lab4.car.Types_of_Cars;
+import lab4.complex.Complex;
 
 import java.util.Scanner;
 
@@ -17,6 +18,9 @@ public class Main {
                 case 1 -> {
                     Car avto = new Car();
                     avto.Changes();
+                }
+                case 2 -> {
+                    Complex.task();
                 }
                 default -> {
                     return;
