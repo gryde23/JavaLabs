@@ -7,7 +7,7 @@ public class SpecialCar extends Car{
     public SpecialCar(String brand, String color, Engine engine,int wheels) {
         super(brand, color, engine, Type.SPECIAL, wheels);
     }
-    public SpecialCar(String brand, String regNumber, String color, Engine engine,int wheels) {
+    public SpecialCar(String brand, String color, Engine engine,int wheels, String regNumber) {
         super(brand, color, engine, Type.SPECIAL, wheels);
         setRegNumber(regNumber, patternRegNumSP);
     }

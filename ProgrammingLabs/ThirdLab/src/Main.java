@@ -224,7 +224,7 @@ public class Main {
 
     public static void task10(){
         Pattern p = Pattern.compile("((\\+7|8)[-\\s(]?\\d{3}[-\\s)]?\\s?\\d{3}([-\\s]?\\d{2}){2})|([23][\\s-]?([\\s-]?\\d{2}){3})");
-        String text = "Мои номера 220-30-40 и 8904-378-16-61 не считая служебных";
+        String text = "Мои номера 220-30-40 и 8904-378-16-61 не считая служебных dfb 89032345656 2345656 234567";
         Matcher m = p.matcher(text);
         while(m.find()){
             int begin = m.start();

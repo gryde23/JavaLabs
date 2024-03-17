@@ -18,7 +18,7 @@ public abstract class Car {
         this.type = type;
         this.wheels = wheels;
     }
-    public Car(String brand,String regNumber, String color, Engine engine, Type type, int wheels) {
+    public Car(String brand, String color, Engine engine, Type type, int wheels, String regNumber) {
        setRegNumber(regNumber);
         this.brand = brand;
         this.color = color;
@@ -39,7 +39,7 @@ public abstract class Car {
                 "}\n";
     }
 
-    public void setColor(String color) {
+    public final void setColor(String color) {
         this.color = color;
     }
 
