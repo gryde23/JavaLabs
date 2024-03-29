@@ -4,7 +4,7 @@ import java.util.Random;
 public class Bag {
     private final Random random = new Random();
     private final int capacity;
-    private ArrayList<Object> bag;
+    protected ArrayList<Object> bag;
     public Bag(int max) {
         this.capacity = max;
         this.bag = new ArrayList<>(capacity);

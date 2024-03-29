@@ -1,7 +1,11 @@
 import lab4.car.*;
 import lab4.complex.Complex;
 import lab4.complex.ComplexFunc;
+import lab4.task9.Func;
+import lab4.task9.Graph;
+import lab4.task9.GraphShower;
 
+import java.awt.*;
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -34,7 +38,16 @@ public class Main {
                     System.out.println(z1.toTrigString());
                 }
                 case 3 -> {
-
+                    Complex z = new Complex(1, 1);
+                    System.out.println("exp: "+ComplexFunc.exp(z));
+                    System.out.println("sin: "+ComplexFunc.sin(z));
+                    System.out.println("cos: "+ComplexFunc.cos(z));
+                    System.out.println("tan: "+ComplexFunc.tan(z));
+                    System.out.println("atan: "+ComplexFunc.arcTan(z));
+                    System.out.println("sh: "+ComplexFunc.sinh(z));
+                    System.out.println("ch: "+ComplexFunc.cosh(z));
+                    System.out.println("th: "+ComplexFunc.tanh(z));
+                    System.out.println("cth: "+ComplexFunc.coth(z));
                 }
                 case 7 -> {
                     Engine passengerEngine = new Engine(6736, 150, 20, 5, "oil");
@@ -56,6 +69,18 @@ public class Main {
                     autobase.carFromRepair(icarus);
                     autobase.getCarsOnBase();
                     autobase.getCarsOnRepair();
+                }
+                case 8 -> {
+                    Graph graph = new Graph();
+                    graph.getCoordinateMesh().addAxis(10,"x");
+                    graph.getCoordinateMesh().addAxis(15,"y");
+                    graph.getMesh().setInterval(5);
+                    graph.addFunc(new Func("sin"), Color.BLUE);
+                    graph.addFunc(new Func("sin"),Color.RED);
+                    GraphShower.showFuncs(graph);
+                    GraphShower.showCoordinateMesh(graph);
+                    GraphShower.showMesh(graph);
+                    GraphShower.showExplanation(graph);
                 }
                 default -> {
                     return;
