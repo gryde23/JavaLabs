@@ -80,7 +80,8 @@ public class Main {
         end = new ArrayList<>(S_end);
         showMachineS(machineS, Etransitions, alphabet, begin, end);
         Map<String, String> machineP = machineP(machineS, alphabet, begin, end);
-        System.out.println(machineP);
+
+        ChainCheck(machineP, alphabet, end);
     }
 
     public static String Alphabet() {
@@ -364,7 +365,72 @@ public class Main {
             }
             break;
         }
-        System.out.println(P);
+        ArrayList<String> p_end = new ArrayList<>();
+        for (String S: end){
+            for (Map.Entry<String,String> p: P.entrySet()){
+                if (p.getValue().contains(S)) p_end.add(p.getKey());
+            }
+        }
+        end.clear();
+        end.addAll(p_end);
+        System.out.println("\n" + P);
+        System.out.print(" ".repeat(10));
+        for (int i = 0; i < alphabet.length(); i++) {
+            System.out.print("|" + " ".repeat(5) + alphabet.charAt(i) + " ".repeat(5));
+        }
+        System.out.println("|\n" + "-".repeat(12 * (alphabet.length() + 1)));
+        for (Map.Entry<String,String> p: P.entrySet()){
+            if (p.getKey().equals("p0")) System.out.printf("-> %7s|", p.getKey());
+            else if (end.contains(p.getKey())) System.out.printf("<- %7s|", p.getKey());
+            else System.out.printf("%10s|", p.getKey());
+            for (int i = 0; i < alphabet.length(); i++){
+                for (Map.Entry<String,String> entry: machineP.entrySet()){
+                    String key = entry.getKey().substring(1,3);
+                    String simb = entry.getKey().substring(4,5);
+                    if (!p.getKey().equals(key) || !simb.equals(String.valueOf(alphabet.charAt(i)))) continue;
+                    String value = entry.getValue();
+                    System.out.printf("%11s|", value);
+                }
+            }
+            System.out.println();
+        }
         return machineP;
+    }
+
+    public static void ChainCheck(Map<String,String> machineP, String alphabet, ArrayList<String> end) {
+        System.out.print("Введите последовательность символов: ");
+        String chain = "";
+        check:
+        while (true){
+            String input = scanner.nextLine();
+            ArrayList<String> buff = new ArrayList<>();
+            for (int i = 0; i < alphabet.length(); i++){
+                buff.add(String.valueOf(alphabet.charAt(i)));
+            }
+            for (int i = 0; i < input.length(); i++) {
+                if (!buff.contains(String.valueOf(input.charAt(i)))) {
+                    System.out.print("Некорректный ввод.Повторите попытку: ");
+                    continue check;
+                }
+            }
+            chain = input;
+            break;
+        }
+        String buff = "p0";
+        while (!chain.isEmpty()) {
+            for (Map.Entry<String, String> P : machineP.entrySet()) {
+                char simb = P.getKey().charAt(4);
+                if (P.getKey().contains(buff) && simb == chain.charAt(0)) {
+                    System.out.println(P.getKey() + " -> " + P.getValue());
+                    buff = P.getValue();
+                    chain = chain.substring(1);
+                    break;
+                }
+            }
+        }
+        if (end.contains(buff)) {
+            System.out.println("Отл");
+        }
+        else System.out.println("Не отл");
     }
 }
