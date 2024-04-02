@@ -4,10 +4,12 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Formal_Languages/Formal_Languages.iml" filepath="$PROJECT_DIR$/Formal_Languages/Formal_Languages.iml" />
       <module fileurl="file://$PROJECT_DIR$/ProgrammingLabs/FourthLab/FourthLab.iml" filepath="$PROJECT_DIR$/ProgrammingLabs/FourthLab/FourthLab.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Operations/Lab1/Lab1.iml" filepath="$PROJECT_DIR$/Operations/Lab1/Lab1.iml" />
       <module fileurl="file://$PROJECT_DIR$/ProgrammingLabs/Lab5/Lab5.iml" filepath="$PROJECT_DIR$/ProgrammingLabs/Lab5/Lab5.iml" />
       <module fileurl="file://$PROJECT_DIR$/Formal_Languages/Laba_1/Laba_1.iml" filepath="$PROJECT_DIR$/Formal_Languages/Laba_1/Laba_1.iml" />
       <module fileurl="file://$PROJECT_DIR$/Formal_Languages/Laba_2/Laba_2.iml" filepath="$PROJECT_DIR$/Formal_Languages/Laba_2/Laba_2.iml" />
       <module fileurl="file://$PROJECT_DIR$/Formal_Languages/Laba_5/Laba_5.iml" filepath="$PROJECT_DIR$/Formal_Languages/Laba_5/Laba_5.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Operations/Operations.iml" filepath="$PROJECT_DIR$/Operations/Operations.iml" />
       <module fileurl="file://$PROJECT_DIR$/ProgrammingLabs/ProgrammingLabs.iml" filepath="$PROJECT_DIR$/ProgrammingLabs/ProgrammingLabs.iml" />
       <module fileurl="file://$PROJECT_DIR$/ProgrammingLabs/SecondLab/SecondLab.iml" filepath="$PROJECT_DIR$/ProgrammingLabs/SecondLab/SecondLab.iml" />
       <module fileurl="file://$PROJECT_DIR$/ProgrammingLabs/ThirdLab/ThirdLab.iml" filepath="$PROJECT_DIR$/ProgrammingLabs/ThirdLab/ThirdLab.iml" />
