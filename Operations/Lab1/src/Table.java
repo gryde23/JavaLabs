@@ -5,7 +5,6 @@ public class Table {
     private ArrayList<Integer> Storages;
     private ArrayList<Integer> Consumers;
     private ArrayList<ArrayList<Integer>> Costs;
-    private ArrayList<ArrayList<Object>> table;
 
     public Table(ArrayList<Integer> Storages, ArrayList<Integer> Consumers, ArrayList<ArrayList<Integer>> Costs) {
         this.Consumers = Consumers;
@@ -13,7 +12,7 @@ public class Table {
         this.Costs = Costs;
     }
 
-    public int TransportationPrice(){
+    public int TransportationPrice(ArrayList<ArrayList<Object>> table){
         int price = 0;
         for (int i = 0; i < table.size(); i++){
             ArrayList<Object> row = table.get(i);
@@ -26,11 +25,8 @@ public class Table {
         return price;
     }
 
-    public ArrayList<ArrayList<Object>> getTable() {
-        return table;
-    }
 
-    public void NorthWestDegree(){
+    public ArrayList<ArrayList<Object>> NorthWest(){
         ArrayList<ArrayList<Object>> table = new ArrayList<>();
         for(int i = 0; i < Storages.size(); i++) {
             int a = Storages.get(i);
@@ -51,6 +47,51 @@ public class Table {
             }
             table.add(row);
         }
-        this.table = table;
+        return table;
+    }
+    public ArrayList<ArrayList<Object>> Potentials(ArrayList<ArrayList<Object>> table){
+        ArrayList<Integer> u = new ArrayList<>(Storages.size());
+        ArrayList<Integer> v = new ArrayList<>(Consumers.size());
+        u.add(0);
+        for (int i = 0; i < Consumers.size(); i++) {
+            v.add(null); // Добавляем null для каждого элемента, чтобы увеличить размер списка
+        }
+        for (int i = 1; i < Storages.size(); i++) {
+            u.add(null); // Добавляем null для каждого элемента, чтобы увеличить размер списка
+        }
+        for (int i = 0; i < table.size(); i++){
+            ArrayList<Object> row = table.get(i);
+            ArrayList<Integer> cost_row = this.Costs.get(i);
+            for (int j = 0; j < row.size(); j++) {
+                if (row.get(j) == "-") continue;
+                if (u.get(i) != null && v.get(j) == null) {
+                    int c = cost_row.get(j) - u.get(i);
+                    v.set(j, c);
+                }
+                else{
+                    int c = cost_row.get(j) - v.get(j);
+                    u.set(i, c);
+                }
+            }
+        }
+        ArrayList<ArrayList<Object>> potentials = new ArrayList<>(Storages.size());
+        for (int i = 0; i < Storages.size(); i++) {
+            ArrayList<Object> row = new ArrayList<>(Consumers.size());
+            for (int j = 0; j < Consumers.size(); j++) {
+                row.add("-");
+            }
+            potentials.add(row);
+        }
+        for(int i = 0; i < Storages.size(); i++){
+            ArrayList<Object> row = table.get(i);
+            ArrayList<Integer> cost_row = this.Costs.get(i);
+            ArrayList<Object> potential_row = potentials.get(i);
+            for(int j = 0; j < Consumers.size(); j++){
+                if(row.get(j) != "-") continue;
+                int p = cost_row.get(j) - (u.get(i) + v.get(j));
+                potential_row.set(j, p);
+            }
+        }
+        return potentials;
     }
 }
