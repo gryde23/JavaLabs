@@ -1,3 +1,4 @@
+
 import java.util.ArrayList;
 
 public class Table {
@@ -5,14 +6,28 @@ public class Table {
     private ArrayList<Integer> Storages;
     private ArrayList<Integer> Consumers;
     private ArrayList<ArrayList<Integer>> Costs;
-
+    private ArrayList<ArrayList<Object>> table = new ArrayList<>();
+    private ArrayList<ArrayList<Object>> potentials = new ArrayList<>();
     public Table(ArrayList<Integer> Storages, ArrayList<Integer> Consumers, ArrayList<ArrayList<Integer>> Costs) {
         this.Consumers = Consumers;
         this.Storages = Storages;
         this.Costs = Costs;
     }
 
-    public int TransportationPrice(ArrayList<ArrayList<Object>> table){
+    public void printTable(){
+        System.out.print(" ".repeat(5));
+        for (Integer b: Consumers){
+            System.out.printf("%3d  ", b);
+        }
+        for (int i = 0; i < Storages.size(); i++) {
+            System.out.printf("\n%3d  ", Storages.get(i));
+            for (int j = 0; j < Consumers.size();j++){
+                System.out.printf("%3s  ", table.get(i).get(j).toString());
+            }
+        }
+    }
+
+    public int TransportationPrice(){
         int price = 0;
         for (int i = 0; i < table.size(); i++){
             ArrayList<Object> row = table.get(i);
@@ -27,7 +42,8 @@ public class Table {
 
 
     public ArrayList<ArrayList<Object>> NorthWest(){
-        ArrayList<ArrayList<Object>> table = new ArrayList<>();
+        ArrayList<Integer> Storages = new ArrayList<>(this.Storages);
+        ArrayList<Integer> Consumers = new ArrayList<>(this.Consumers);
         for(int i = 0; i < Storages.size(); i++) {
             int a = Storages.get(i);
             ArrayList<Object> row = new ArrayList<>();
@@ -49,7 +65,7 @@ public class Table {
         }
         return table;
     }
-    public ArrayList<ArrayList<Object>> Potentials(ArrayList<ArrayList<Object>> table){
+    public ArrayList<ArrayList<Object>> Potentials(){
         ArrayList<Integer> u = new ArrayList<>(Storages.size());
         ArrayList<Integer> v = new ArrayList<>(Consumers.size());
         u.add(0);
@@ -74,7 +90,6 @@ public class Table {
                 }
             }
         }
-        ArrayList<ArrayList<Object>> potentials = new ArrayList<>(Storages.size());
         for (int i = 0; i < Storages.size(); i++) {
             ArrayList<Object> row = new ArrayList<>(Consumers.size());
             for (int j = 0; j < Consumers.size(); j++) {
