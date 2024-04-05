@@ -10,10 +10,9 @@ public class Table {
     private ArrayList<ArrayList<Integer>> Costs;
     private ArrayList<ArrayList<Object>> table = new ArrayList<>();
     private ArrayList<ArrayList<Object>> potentials = new ArrayList<>();
-    private Integer cycle_begin_i, cycle_begin_j;
+    private ArrayList<Pair> Cycle_begin = new ArrayList<>();
     private ArrayList<Integer> Cycle = new ArrayList<>();
     private ArrayList<Pair> Indexies = new ArrayList<>();
-    private ArrayList<Direction> Directions = new ArrayList<>();
     enum Direction{
         up, down, right, left
     }
@@ -36,17 +35,22 @@ public class Table {
         }
     }
     public void checkTable(){
+        int count = 0;
         for (ArrayList<Object> row: table){
             for (Object elem: row){
+                if (elem == "-") continue;
                 ArrayList<Pair> neighbours = neighbours(table.indexOf(row), row.indexOf(elem));
+                count++;
                 if (neighbours.isEmpty()) {
                     if (table.indexOf(row) != 0) {
                         int i = table.indexOf(row) - 1;
                         table.get(i).set(row.indexOf(elem), 0);
+                        count++;
                     }
                     else if (table.indexOf(row) != Storages.size() - 1){
                         int i = table.indexOf(row) + 1;
                         table.get(i).set(row.indexOf(elem), 0);
+                        count++;
                     }
                 }
             }
@@ -109,7 +113,9 @@ public class Table {
         for (int i = 1; i < Storages.size(); i++) {
             u.add(null); // Добавляем null для каждого элемента, чтобы увеличить размер списка
         }
-        p1:    for (int i = 0; i < table.size(); i++) {
+        p:while (true) {
+            p1:
+            for (int i = 0; i < table.size(); i++) {
                 ArrayList<Object> row = table.get(i);
                 ArrayList<Integer> cost_row = this.Costs.get(i);
                 for (int j = 0; j < row.size(); j++) {
@@ -124,21 +130,29 @@ public class Table {
                     }
                 }
             }
-        p2:    for (int i = Storages.size() - 1; i >= 0; i--) {
+            p2:
+            for (int i = Storages.size() - 1; i >= 0; i--) {
                 ArrayList<Object> row = table.get(i);
                 ArrayList<Integer> cost_row = this.Costs.get(i);
-                for (int j = Consumers.size() - 1; j >= 0; j--){
+                for (int j = Consumers.size() - 1; j >= 0; j--) {
                     if (row.get(j) == "-") continue;
+                    if (u.get(i) == null && v.get(j) == null) {
+                        table.get(i).set(j, 0);
+                        continue p;
+                    }
                     if (u.get(i) != null && v.get(j) == null) {
                         int c = cost_row.get(j) - u.get(i);
-                        v.set(j,c);
+                        v.set(j, c);
                     } else {
                         int c = cost_row.get(j) - v.get(j);
                         u.set(i, c);
                     }
                 }
+            }
+            break ;
         }
         potentials = new ArrayList<>();
+        Cycle_begin = new ArrayList<>();
         for (int i = 0; i < Storages.size(); i++) {
             ArrayList<Object> row = new ArrayList<>(Consumers.size());
             for (int j = 0; j < Consumers.size(); j++) {
@@ -162,13 +176,16 @@ public class Table {
                 if (elem == "-") continue;
                 Integer e = (Integer) elem;
                 if (e < min) {
-                    cycle_begin_i = potentials.indexOf(row);
-                    cycle_begin_j = row.indexOf(elem);
                     min = e;
                 }
             }
         }
-        table.get(cycle_begin_i).set(cycle_begin_j, 0);
+        for (ArrayList<Object> row: potentials){
+            for (Object elem: row){
+                if (elem == "-" || (Integer) elem != min) continue;
+                Cycle_begin.add(new Pair(potentials.indexOf(row), row.indexOf(elem)));
+            }
+        }
         return potentials;
     }
 
@@ -215,7 +232,15 @@ public class Table {
         return Cut_table;
     }
 
-    public boolean searchCycle(ArrayList<ArrayList<Object>> Cut_table) {
+    public boolean searching(){
+        for (Pair index: Cycle_begin){
+            if (searchCycle(index.getFirst(), index.getSecond())) return true;
+        }
+        return false;
+    }
+    public boolean searchCycle(Integer cycle_begin_i, Integer cycle_begin_j) {
+        table.get(cycle_begin_i).set(cycle_begin_j, 0);
+        ArrayList<ArrayList<Object>> Cut_table = tableCut();
         Cycle = new ArrayList<>();
         Indexies = new ArrayList<>();
         Cycle.add((Integer) table.get(cycle_begin_i).get(cycle_begin_j));
@@ -226,7 +251,10 @@ public class Table {
         while (true) {
             if (row == cycle_begin_i && column == cycle_begin_j && Cycle.size() >= 4) {
                 for (int i = 1; i < Cycle.size(); i += 2){
-                    if (Cycle.get(i) == 0) return false;
+                    if (Cycle.get(i) == 0) {
+                        table.get(cycle_begin_i).set(cycle_begin_j, "-");
+                        return false;
+                    }
                 }
                 Cycle.removeLast();
                 Indexies.removeLast();
@@ -284,7 +312,6 @@ public class Table {
     }
     public void rebaseTable(){
         int min = Cycle.get(1);
-        int count = 0;
         for (int i = 1; i < Cycle.size(); i += 2){
             if (Cycle.get(i) < min) min = Cycle.get(i);
         }
@@ -304,14 +331,14 @@ public class Table {
             if (Cycle.get(i) == null) table.get(row).set(column, "-");
             else table.get(row).set(column, Cycle.get(i));
         }
-
+        checkTable();
     }
     private ArrayList<Pair> neighbours(Integer row, Integer column){
         ArrayList<Pair> neighbours = new ArrayList<>();
         for(Direction dir: Direction.values()){
             switch(dir){
                 case up -> {
-                    for(int i = row - 1; i > 0; i--){
+                    for(int i = row - 1; i >= 0; i--){
                         if (table.get(i).get(column) == "-") continue;
                         neighbours.add(new Pair(i, column));
                         break;
@@ -332,7 +359,7 @@ public class Table {
                     }
                 }
                 case left -> {
-                    for (int j = column - 1; j > 0; j--) {
+                    for (int j = column - 1; j >= 0; j--) {
                         if (table.get(row).get(j) == "-") continue;
                         neighbours.add(new Pair(row, j));
                         break;
