@@ -53,5 +53,27 @@ public class Main {
             }
             System.out.println();
         }
+        ArrayList<ArrayList<Object>> Cut_table = table.tableCut();
+//        for(ArrayList<Object> row: Cut_table){
+//            for (Object elem: row) {
+//                System.out.printf("%3s  ", elem.toString());
+//            }
+//            System.out.println();
+//        }
+        while (table.searchCycle(Cut_table)){
+            table.rebaseTable();
+            table.printTable();
+            System.out.println("\nprice = " + table.TransportationPrice());
+            table.Potentials();
+            Cut_table = table.tableCut();
+        }
+//        table.searchCycle(Cut_table);
+//        table.rebaseTable();
+//        table.printTable();
+//        System.out.println("\nprice = " + table.TransportationPrice());
+//        Cut_table = table.tableCut();
+//        table.searchCycle(Cut_table);
+//        table.rebaseTable();
+//        table.printTable();
     }
 }
