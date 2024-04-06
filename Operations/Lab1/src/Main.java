@@ -64,6 +64,14 @@ public class Main {
             table.rebaseTable();
             table.Potentials();
             table.printTable();
+            System.out.println("\nPotentials");
+            potentials = table.Potentials();
+            for (ArrayList<Object> row: potentials){
+                for (Object elem: row) {
+                    System.out.printf("%3s  ", elem.toString());
+                }
+                System.out.println();
+            }
             System.out.println("\nprice = " + table.TransportationPrice());
         }
 //        table.searchCycle(Cut_table);

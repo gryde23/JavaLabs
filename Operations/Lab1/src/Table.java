@@ -34,6 +34,11 @@ public class Table {
             }
         }
     }
+
+    public ArrayList<ArrayList<Object>> getPotentials() {
+        return potentials;
+    }
+
     public void checkTable(){
         int count = 0;
         for (ArrayList<Object> row: table){
@@ -52,6 +57,14 @@ public class Table {
                         table.get(i).set(row.indexOf(elem), 0);
                         count++;
                     }
+                }
+            }
+        }
+        if (count > Storages.size() + Consumers.size() - 1) {
+            for (ArrayList<Object> row: table){
+                for (Object elem: row){
+                    if (elem == "-") continue;
+                    if ((Integer) elem == 0) row.set(row.indexOf(elem), "-");
                 }
             }
         }
@@ -99,6 +112,16 @@ public class Table {
             }
             table.add(row);
         }
+        for (int i = 0; i < Storages.size(); i++) {
+            for (int j = 0; j < Consumers.size(); j++){
+                if (table.get(i).get(j) == "-") continue;
+                if (i > 0 && j > 0) {
+                    if (table.get(i-1).get(j) == "-" && table.get(i).get(j - 1) == "-") {
+                        table.get(i-1).set(j, 0);
+                    }
+                }
+            }
+        }
         return table;
     }
 
@@ -113,6 +136,7 @@ public class Table {
         for (int i = 1; i < Storages.size(); i++) {
             u.add(null); // Добавляем null для каждого элемента, чтобы увеличить размер списка
         }
+        boolean flag = false;
         p:while (true) {
             p1:
             for (int i = 0; i < table.size(); i++) {
@@ -120,7 +144,12 @@ public class Table {
                 ArrayList<Integer> cost_row = this.Costs.get(i);
                 for (int j = 0; j < row.size(); j++) {
                     if (row.get(j) == "-") continue;
-                    if (u.get(i) == null && v.get(j) == null) continue p1;
+                    if (u.get(i) == null && v.get(j) == null && flag) {
+                        table.get(i - 1).set(j, 0);
+                        flag = false;
+                        continue p;
+                    }
+                    if (u.get(i) == null && v.get(j) == null) continue;
                     if (u.get(i) != null && v.get(j) == null) {
                         int c = cost_row.get(j) - u.get(i);
                         v.set(j, c);
@@ -137,7 +166,7 @@ public class Table {
                 for (int j = Consumers.size() - 1; j >= 0; j--) {
                     if (row.get(j) == "-") continue;
                     if (u.get(i) == null && v.get(j) == null) {
-                        table.get(i).set(j, 0);
+                        flag = true;
                         continue p;
                     }
                     if (u.get(i) != null && v.get(j) == null) {
