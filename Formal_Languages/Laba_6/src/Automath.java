@@ -5,7 +5,7 @@ public class Automath {
     private final String alphabet;
     private ArrayList<String> States = new ArrayList<>();
     private ArrayList<String> end_states = new ArrayList<>();
-    private Map<Integer, EqualClass> Equal_classes = new LinkedHashMap<>();
+    private final Set<EqualClass> Equal_classes = new LinkedHashSet<>();
     private Map<String, String> automath = new LinkedHashMap<>();
 
     public Automath(Integer num_states) {
@@ -14,10 +14,6 @@ public class Automath {
             this.States.add("q" + i);
         }
         setEnd_states();
-    }
-
-    public ArrayList<String> getEnd_states() {
-        return end_states;
     }
 
     public void print() {
@@ -63,6 +59,22 @@ public class Automath {
             }
         }
         this.end_states = end;
+    }
+
+    public String getAlphabet() {
+        return alphabet;
+    }
+
+    public Set<EqualClass> getEqual_classes() {
+        return Equal_classes;
+    }
+
+    public Map<String, String> getAutomath() {
+        return automath;
+    }
+
+    public ArrayList<String> getEnd_states() {
+        return end_states;
     }
 
     public static String setAlphabet() {
@@ -123,7 +135,8 @@ public class Automath {
         Set<String> visited = new LinkedHashSet<>();
         visited.add("q0");
         String state = "q0";
-        s:while(true){
+        s:
+        while (true) {
             for (Map.Entry<String, String> entry : automath.entrySet()) {
                 if (entry.getKey().contains(state) && !visited.contains(entry.getValue())) {
                     visited.add(entry.getValue());
@@ -137,7 +150,6 @@ public class Automath {
         Collections.sort(list);
         visited = new LinkedHashSet<>(list);
         States = new ArrayList<>(visited);
-        del:
         while (States.size() * alphabet.length() != automath.size()) {
             for (Map.Entry<String, String> entry : automath.entrySet()) {
                 String q = entry.getKey().substring(1, 3);
@@ -146,12 +158,76 @@ public class Automath {
                     break;
                 }
             }
-            for (String q: end_states) {
+            for (String q : end_states) {
                 if (!States.contains(q)) {
                     end_states.remove(q);
                     break;
                 }
             }
+        }
+    }
+
+    public void ZeroClass() {
+        Equal_classes.add(new EqualClass(end_states, "C1"));
+        ArrayList<String> c2 = new ArrayList<>();
+        for (String q : States) {
+            if (!end_states.contains(q)) c2.add(q);
+        }
+        Equal_classes.add(new EqualClass(c2, "C2"));
+    }
+
+    public boolean breakClasses(int num) {
+        System.out.print("\n" + num + " = ");
+        for (EqualClass cl : Equal_classes) {
+            System.out.print(cl.getStates() + ", ");
+        }
+        Set<EqualClass> next_EqualClasses = new LinkedHashSet<>();
+        for (EqualClass equalClass : Equal_classes) {
+            if (equalClass.getStates().size() == 1) {
+                next_EqualClasses.add(equalClass);
+                continue;
+            }
+            boolean flag = false;
+            for (int i = 0; i < alphabet.length(); i++) {
+                ArrayList<String> new_class = new ArrayList<>();
+                for (String state : equalClass.getStates()) {
+                    for (Map.Entry<String, String> entry : automath.entrySet()) {
+                        if (entry.getKey().contains(state) && entry.getKey().substring(4, 5).equals(String.valueOf(alphabet.charAt(i)))) {
+                            if (!equalClass.getStates().contains(entry.getValue())) {
+                                new_class.add(state);
+                            }
+                            break;
+                        }
+                    }
+                }
+                if ((new_class.isEmpty() && flag) || new_class.size() == equalClass.getStates().size()) {
+                    next_EqualClasses.add(equalClass);
+                    continue;
+                }
+                if (new_class.isEmpty()) {
+                    flag = true;
+                    continue;
+                }
+                EqualClass newClass1 = new EqualClass(new_class, "C" + (Equal_classes.size() + 1));
+                ArrayList<String> buff = new ArrayList<>();
+                for (String state : equalClass.getStates()) {
+                    if (!new_class.contains(state)) buff.add(state);
+                }
+                boolean add_flag1 = false, add_flag2 = false;
+                EqualClass newClass2 = new EqualClass(buff, equalClass.getName());
+                for (EqualClass eclass : next_EqualClasses) {
+                    if (eclass.equals(newClass2)) add_flag2 = true;
+                    if (eclass.equals(newClass1)) add_flag1 = true;
+                }
+                if (!add_flag2) next_EqualClasses.add(newClass2);
+                if (!add_flag1) next_EqualClasses.add(newClass1);
+            }
+        }
+        if (Equal_classes.equals(next_EqualClasses)) return true;
+        else {
+            Equal_classes.clear();
+            Equal_classes.addAll(next_EqualClasses);
+            return false;
         }
     }
 }
