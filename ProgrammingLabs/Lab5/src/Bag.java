@@ -10,6 +10,14 @@ public class Bag {
         this.bag = new ArrayList<>(capacity);
     }
 
+    public void shake(){
+        for(int i = 0; i < bag.size();i++){
+            int j = random.nextInt(bag.size());
+            Object tmp = bag.get(i);
+            bag.set(i, bag.get(j));
+            bag.set(j, tmp);
+        }
+    }
     public <T> void addElement(T elem){
         if (bag.size() >= capacity) {
             System.out.println("Мешок полон");

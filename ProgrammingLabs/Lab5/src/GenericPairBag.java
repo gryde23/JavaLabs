@@ -26,7 +26,12 @@ public class GenericPairBag<T> {
         Random random = new Random();
         int index = random.nextInt(pairs.size());
         return pairs.get(index);
-
-
+    }
+    public Pair<T,T> removePair(){
+        Random random = new Random();
+        int index = random.nextInt(pairs.size());
+        Pair<T,T> buff = pairs.get(index);
+        pairs.remove(index);
+        return buff;
     }
 }

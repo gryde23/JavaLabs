@@ -6,12 +6,12 @@ import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Integer[] storages_f = {300,250,200};
-        Integer[] consumers_f = {160, 120, 140, 200, 170};
+        Integer[] storages_f = {200,150,350};
+        Integer[] consumers_f = {120, 120, 200, 180, 110};
         Integer[][] costs_f = {
-                {1,4,2,1,3},
-                {6,2,3,5,1},
-                {2,3,4,1,4}
+                {1,2,3,5,2},
+                {4,6,7,3,1},
+                {2,2,3,4,5}
         };
         ArrayList<Integer> Storages = new ArrayList<>(List.of(storages_f));
         ArrayList<Integer> Consumers = new ArrayList<>(List.of(consumers_f));
