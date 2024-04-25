@@ -110,7 +110,7 @@ public class Main {
                 }
                 case 8 -> {
                     int[] nominals = {1,2,5,10};
-                    int Sum = 20;
+                    int Sum = 9;
                     DList<Integer, Integer> res = new DList<>();
                     for (int i = 1; i <= Sum; i++){
                         int t = i;
