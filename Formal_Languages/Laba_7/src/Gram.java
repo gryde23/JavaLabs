@@ -17,8 +17,12 @@ public class Gram {
                     terminals.contains(rule.getFirst())) return false;
             String rightPart = rule.getSecond();
             if (rightPart.equals("E")) continue;
+            int count = 0;
             for (String nonterm: nonterminals){
-                if (rightPart.contains(nonterm) && !nonterminals.contains(String.valueOf(rightPart.charAt(0)))) return false;
+                for (int i = 0; i < rightPart.length(); i++){
+                    if (String.valueOf(rightPart.charAt(i)).equals(nonterm)) count++;
+                }
+                if ((rightPart.contains(nonterm) && !nonterminals.contains(String.valueOf(rightPart.charAt(0)))) || count > 1) return false;
             }
         }
         return true;
@@ -30,8 +34,12 @@ public class Gram {
                     terminals.contains(rule.getFirst())) return false;
             String rightPart = rule.getSecond();
             if (rightPart.equals("E")) continue;
+            int count = 0;
             for (String nonterm: nonterminals){
-                if (rightPart.contains(nonterm) && !nonterminals.contains(String.valueOf(rightPart.charAt(rightPart.length() - 1)))) return false;
+                for (int i = 0; i < rightPart.length(); i++){
+                    if (String.valueOf(rightPart.charAt(i)).equals(nonterm)) count++;
+                }
+                if ((rightPart.contains(nonterm) && !nonterminals.contains(String.valueOf(rightPart.charAt(rightPart.length() - 1)))) || count > 1) return false;
             }
         }
         return true;
@@ -74,8 +82,9 @@ public class Gram {
             }
             if (j < leftPart.length() - 1) psi2 = leftPart.substring(j);
             else psi2 = "";
-            if (leftPart.substring(i,j).length() > 1) return false;
-            if (!rightPart.contains(psi1) && !rightPart.contains(psi2)) return false;
+//            if (!rightPart.substring(0, i).equals(psi1) || !rightPart.substring(rightPart.length() - j).equals(psi2)) return false;
+            if (leftPart.substring(i,j + 1).length() > 1) return false;
+            if (!rightPart.contains(psi1) || !rightPart.contains(psi2)) return false;
             if (i == j && !psi1.isEmpty() && !psi2.isEmpty()) return false;
         }
         return true;
